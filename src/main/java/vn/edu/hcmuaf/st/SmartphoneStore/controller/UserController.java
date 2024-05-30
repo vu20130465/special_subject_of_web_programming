@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.hcmuaf.st.SmartphoneStore.dto.UserDto;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.User;
 import vn.edu.hcmuaf.st.SmartphoneStore.service.impl.UserService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequestMapping("/user")
@@ -39,9 +41,10 @@ public class UserController {
 
     // Create a new user
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@RequestBody UserDto user) {
         try {
-            User result = userService.createUser(user);
+            User result = userService.createUser(user.convertToUser());
+            result.setCreatedAt(LocalDateTime.now());
             return new ResponseEntity<>(result, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -50,14 +53,15 @@ public class UserController {
 
     // Update a user by ID
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User user) {
-        User existingUser = userService.findById(id);
-        if (existingUser != null) {
-            user.setUserId(id);
-            User result = userService.createUser(user);
-            return ResponseEntity.ok(result);
-        } else {
+    public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody UserDto user) {
+        User userToUpdate = userService.findById(id);
+        if (userToUpdate == null) {
             return ResponseEntity.notFound().build();
+        }else {
+            User userTmp = user.convertToUser();
+            userTmp.setCreatedAt(userToUpdate.getCreatedAt());
+            User result = userService.updateUser(id, userTmp);
+            return ResponseEntity.ok(result);
         }
     }
 

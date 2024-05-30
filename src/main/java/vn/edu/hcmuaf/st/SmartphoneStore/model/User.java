@@ -1,7 +1,9 @@
 package vn.edu.hcmuaf.st.SmartphoneStore.model;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import vn.edu.hcmuaf.st.SmartphoneStore.dto.UserDto;
 
 import java.util.List;
 
@@ -9,7 +11,7 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "Users")
-public class User {
+public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
@@ -39,4 +41,13 @@ public class User {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Cart cart;
+
+    public void loadFromDto(UserDto userDto) {
+        this.username = userDto.getUsername();
+        this.password = userDto.getPassword();
+        this.email = userDto.getEmail();
+        this.fullName = userDto.getFullName();
+        this.phoneNumber = userDto.getPhoneNumber();
+        this.address = userDto.getAddress();
+    }
 }
