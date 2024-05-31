@@ -40,7 +40,7 @@ public class UserController {
     }
 
     // Create a new user
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<User> createUser(@RequestBody UserDto user) {
         try {
             User result = userService.createUser(user.convertToUser());
