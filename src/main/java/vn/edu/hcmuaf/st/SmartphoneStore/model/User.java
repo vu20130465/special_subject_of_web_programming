@@ -1,17 +1,23 @@
 package vn.edu.hcmuaf.st.SmartphoneStore.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import vn.edu.hcmuaf.st.SmartphoneStore.dto.UserDto;
 
+import java.util.Collection;
 import java.util.List;
 
 @Getter
 @Setter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "Users")
-public class User extends BaseEntity {
+public class User extends BaseEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
@@ -31,7 +37,7 @@ public class User extends BaseEntity {
     @Column(length = 256)
     private String address;
 
-    private String role;
+    private Role role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orders;
@@ -49,5 +55,40 @@ public class User extends BaseEntity {
         this.fullName = userDto.getFullName();
         this.phoneNumber = userDto.getPhoneNumber();
         this.address = userDto.getAddress();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
