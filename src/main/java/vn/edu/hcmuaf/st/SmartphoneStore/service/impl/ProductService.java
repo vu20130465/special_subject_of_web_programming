@@ -3,7 +3,9 @@ package vn.edu.hcmuaf.st.SmartphoneStore.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.Product;
+import vn.edu.hcmuaf.st.SmartphoneStore.model.Review;
 import vn.edu.hcmuaf.st.SmartphoneStore.repository.ProductRepository;
+import vn.edu.hcmuaf.st.SmartphoneStore.repository.ReviewRepository;
 import vn.edu.hcmuaf.st.SmartphoneStore.service.IProductService;
 
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.Optional;
 public class ProductService implements IProductService {
     private final ProductRepository productRepository;
 
+    private final ReviewRepository reviewRepository;
     @Override
     public List<Product> getAllProducts() {
         return productRepository.findAll();
@@ -24,7 +27,9 @@ public class ProductService implements IProductService {
         Optional<Product> product = productRepository.findById(id);
         return product.orElse(null);
     }
-
+    public List<Review> getReviewsByProductId(int productId) {
+        return reviewRepository.findByProduct_ProductId(productId);
+    }
     @Override
     public Product createProduct(Product product) {
         return productRepository.save(product);
