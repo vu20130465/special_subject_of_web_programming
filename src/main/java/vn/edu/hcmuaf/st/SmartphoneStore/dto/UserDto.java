@@ -3,6 +3,7 @@ package vn.edu.hcmuaf.st.SmartphoneStore.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import vn.edu.hcmuaf.st.SmartphoneStore.model.Role;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.User;
 
 @Getter
@@ -24,6 +25,7 @@ public class UserDto {
         user.setFullName(this.fullName);
         user.setPhoneNumber(this.phoneNumber);
         user.setAddress(this.address);
+        user.setRole(Role.USER);
         return user;
     }
 }
