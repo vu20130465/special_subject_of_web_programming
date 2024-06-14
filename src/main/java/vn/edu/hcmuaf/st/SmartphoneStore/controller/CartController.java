@@ -6,7 +6,7 @@ import vn.edu.hcmuaf.st.SmartphoneStore.dto.CartDTO;
 import vn.edu.hcmuaf.st.SmartphoneStore.service.CartService;
 
 @RestController
-@RequestMapping("/api/cart")
+@RequestMapping("/cart")
 public class CartController {
 
     @Autowired
