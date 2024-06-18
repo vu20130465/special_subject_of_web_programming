@@ -1,6 +1,9 @@
 package vn.edu.hcmuaf.st.SmartphoneStore.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.Product;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.Review;
@@ -70,7 +73,10 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> searchProducts(String query) {
-        return productRepository.findByNameContainingOrDescriptionContaining(query, query);
+    public Page<Product> findByCriteria(String query, String brand, Pageable pageable) {
+        return productRepository.findByCriteria(query, brand, pageable);
     }
+
+
+
 }

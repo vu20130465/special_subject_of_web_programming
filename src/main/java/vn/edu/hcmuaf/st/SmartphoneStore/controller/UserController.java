@@ -3,8 +3,9 @@ package vn.edu.hcmuaf.st.SmartphoneStore.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import vn.edu.hcmuaf.st.SmartphoneStore.dto.UserDto;
+import vn.edu.hcmuaf.st.SmartphoneStore.dto.UserDTO;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.User;
 import vn.edu.hcmuaf.st.SmartphoneStore.service.impl.UserService;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @RequestMapping("/user")
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin(origins = {"http://localhost:3000"})
 public class UserController {
     private final UserService userService;
 
@@ -27,7 +29,12 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    @GetMapping("/profile")
+    public ResponseEntity<UserDTO> getInfoUser() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDTO result = userService.getInfoUser(user);
+        return ResponseEntity.ok(result);
+    }
     // Get a single user by ID
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable int id) {
@@ -41,7 +48,7 @@ public class UserController {
 
     // Create a new user
     @PostMapping("/add")
-    public ResponseEntity<User> createUser(@RequestBody UserDto user) {
+    public ResponseEntity<User> createUser(@RequestBody UserDTO user) {
         try {
             User result = userService.createUser(user.convertToUser());
             result.setCreatedAt(LocalDateTime.now());
@@ -53,7 +60,7 @@ public class UserController {
 
     // Update a user by ID
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody UserDto user) {
+    public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody UserDTO user) {
         User userToUpdate = userService.findById(id);
         if (userToUpdate == null) {
             return ResponseEntity.notFound().build();

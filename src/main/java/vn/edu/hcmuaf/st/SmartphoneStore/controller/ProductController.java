@@ -1,6 +1,10 @@
 package vn.edu.hcmuaf.st.SmartphoneStore.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +16,7 @@ import java.util.List;
 @RequestMapping("/product")
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin(origins = {"http://localhost:3000"})
 public class ProductController {
     private final ProductService productService;
 
@@ -74,8 +79,16 @@ public class ProductController {
 
     // Search for products by name or description
     @GetMapping("/search")
-    public List<Product> searchProducts(@RequestParam String query) {
-        return productService.searchProducts(query);
+    public ResponseEntity<Page<Product>> searchProducts(
+            @RequestParam("query") String query,
+            @RequestParam(value = "brand", required = false) String brand,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "sort", defaultValue = "price,ASC") String[] sort) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sort[1].equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sort[0]));
+        Page<Product> products = productService.findByCriteria(query, brand, pageable);
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
 }

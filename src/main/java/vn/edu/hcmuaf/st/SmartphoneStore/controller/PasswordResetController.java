@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import vn.edu.hcmuaf.st.SmartphoneStore.dto.response.OtpResponse;
 import vn.edu.hcmuaf.st.SmartphoneStore.dto.response.ResetPasswordResponse;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.User;
@@ -21,6 +18,7 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = {"http://localhost:3000"})
 public class PasswordResetController {
     @Autowired
     private UserRepository userRepository;
