@@ -5,7 +5,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import vn.edu.hcmuaf.st.SmartphoneStore.dto.UserDto;
+import vn.edu.hcmuaf.st.SmartphoneStore.dto.UserDTO;
 
 import java.util.Collection;
 import java.util.List;
@@ -48,7 +48,7 @@ public class User extends BaseEntity implements UserDetails {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Cart cart;
 
-    public void loadFromDto(UserDto userDto) {
+    public void loadFromDto(UserDTO userDto) {
         this.username = userDto.getUsername();
         this.password = userDto.getPassword();
         this.email = userDto.getEmail();

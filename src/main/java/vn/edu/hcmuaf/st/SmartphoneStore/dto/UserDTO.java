@@ -2,6 +2,7 @@ package vn.edu.hcmuaf.st.SmartphoneStore.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.Role;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.User;
@@ -9,14 +10,16 @@ import vn.edu.hcmuaf.st.SmartphoneStore.model.User;
 @Getter
 @Setter
 @AllArgsConstructor
-public class UserDto {
+@NoArgsConstructor
+
+public class UserDTO {
     private String username;
     private String password;
     private String email;
     private String fullName;
     private String phoneNumber;
     private String address;
-
+    private Role role;
     public User convertToUser() {
         User user = new User();
         user.setUsername(this.username);

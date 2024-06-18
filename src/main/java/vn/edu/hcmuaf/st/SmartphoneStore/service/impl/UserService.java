@@ -1,7 +1,9 @@
 package vn.edu.hcmuaf.st.SmartphoneStore.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import vn.edu.hcmuaf.st.SmartphoneStore.dto.UserDTO;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.User;
 import vn.edu.hcmuaf.st.SmartphoneStore.service.IUserService;
 import vn.edu.hcmuaf.st.SmartphoneStore.repository.UserRepository;
@@ -12,7 +14,17 @@ import java.util.List;
 @Service
 public class UserService implements IUserService {
     private final UserRepository userRepository;
-
+    public UserDTO getInfoUser(User user) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername(user.getUsername());
+        userDTO.setPassword(user.getPassword());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setFullName(user.getFullName());
+        userDTO.setPhoneNumber(user.getPhoneNumber());
+        userDTO.setAddress(user.getAddress());
+        userDTO.setRole(user.getRole());
+       return userDTO;
+    }
     @Override
     public List<User> findAll() {
         return userRepository.findAll();

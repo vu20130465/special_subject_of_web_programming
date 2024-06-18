@@ -11,7 +11,7 @@ import vn.edu.hcmuaf.st.SmartphoneStore.service.impl.AuthenticationService;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = {"http://localhost:5000"})
+@CrossOrigin(origins = {"http://localhost:3000"})
 @RequiredArgsConstructor
 public class authController {
     private final AuthenticationService authenticationService;
