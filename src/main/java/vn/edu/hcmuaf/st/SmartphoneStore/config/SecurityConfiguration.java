@@ -23,6 +23,7 @@ public class SecurityConfiguration {
         http.csrf().disable().authorizeHttpRequests().requestMatchers("/auth/**")
                 .permitAll()
                 .requestMatchers("/api/**").permitAll()
+                .requestMatchers("/product/getAll").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
