@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.Product;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.Review;
@@ -75,6 +76,13 @@ public class ProductService implements IProductService {
     @Override
     public Page<Product> findByCriteria(String query, String brand, Pageable pageable) {
         return productRepository.findByCriteria(query, brand, pageable);
+    }
+
+
+    @Override
+    public List<Product> getLatestProducts() {
+        Pageable pageable = PageRequest.of(0, 4, Sort.by(Sort.Direction.DESC, "createdAt"));
+        return productRepository.findAll(pageable).getContent();
     }
 
 
