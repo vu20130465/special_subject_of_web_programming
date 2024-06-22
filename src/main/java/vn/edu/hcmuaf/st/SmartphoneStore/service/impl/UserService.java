@@ -23,6 +23,7 @@ public class UserService implements IUserService {
         userDTO.setPhoneNumber(user.getPhoneNumber());
         userDTO.setAddress(user.getAddress());
         userDTO.setRole(user.getRole());
+        userDTO.setId(user.getUserId());
        return userDTO;
     }
     @Override
