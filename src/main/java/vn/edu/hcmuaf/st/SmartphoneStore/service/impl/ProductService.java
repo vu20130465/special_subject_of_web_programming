@@ -31,9 +31,6 @@ public class ProductService implements IProductService {
         Optional<Product> product = productRepository.findById(id);
         return product.orElse(null);
     }
-    public List<Review> getReviewsByProductId(int productId) {
-        return reviewRepository.findByProduct_ProductId(productId);
-    }
     @Override
     public Product createProduct(Product product) {
         return productRepository.save(product);

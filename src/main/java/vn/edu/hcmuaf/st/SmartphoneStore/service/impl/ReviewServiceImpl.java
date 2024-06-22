@@ -2,8 +2,11 @@ package vn.edu.hcmuaf.st.SmartphoneStore.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import vn.edu.hcmuaf.st.SmartphoneStore.dto.ReviewDTO;
+import vn.edu.hcmuaf.st.SmartphoneStore.model.Product;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.Review;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.User;
+import vn.edu.hcmuaf.st.SmartphoneStore.repository.ProductRepository;
 import vn.edu.hcmuaf.st.SmartphoneStore.repository.ReviewRepository;
 import vn.edu.hcmuaf.st.SmartphoneStore.repository.UserRepository;
 import vn.edu.hcmuaf.st.SmartphoneStore.service.IReviewService;
@@ -19,6 +22,9 @@ public class ReviewServiceImpl implements IReviewService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private  ProductRepository productRepository;
     @Override
     public Review addReview(Review review) {
         if (review.getUser() == null) {
@@ -53,4 +59,30 @@ public class ReviewServiceImpl implements IReviewService {
     public List<Review> getReviewsByProductId(int productId) {
         return reviewRepository.findByProduct_ProductId(productId);
     }
+
+    public ReviewDTO mapToReviewDTO(Review review){
+
+        ReviewDTO reviewDTO = new ReviewDTO();
+        reviewDTO.setIdProduct(review.getProduct().getProductId());
+        reviewDTO.setIdUser(review.getUser().getUserId());
+        reviewDTO.setRating(review.getRating());
+        reviewDTO.setComment(review.getComment());
+
+
+        return reviewDTO;
+    }
+
+    public Review mapFromReviewDTOToReview(ReviewDTO reviewDTO){
+        Review review = new Review();
+        Product product = productRepository.findById(reviewDTO.getIdProduct()).orElseThrow(() -> new RuntimeException("Product not found: "));
+        review.setProduct(product);
+        review.setUser(userRepository.findByUserId(reviewDTO.getIdUser()).orElseThrow(() -> new RuntimeException("User not found: ")));
+        review.setRating(reviewDTO.getRating());
+        review.setComment(reviewDTO.getComment());
+
+        return review;
+    }
+//    public List<Review> getReviewsByProductId(int productId) {
+//        return reviewRepository.findByProductId(productId);
+//    }
 }
