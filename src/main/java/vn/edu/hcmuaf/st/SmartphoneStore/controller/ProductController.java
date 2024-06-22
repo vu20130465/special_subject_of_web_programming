@@ -1,6 +1,8 @@
 package vn.edu.hcmuaf.st.SmartphoneStore.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +21,7 @@ import java.util.List;
 @CrossOrigin(origins = {"http://localhost:3000"})
 public class ProductController {
     private final ProductService productService;
-
+    private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
     // Get all products
     @GetMapping("/getAll")
     public ResponseEntity<List<Product>> getAllProduct() {
@@ -90,5 +92,14 @@ public class ProductController {
         Page<Product> products = productService.findByCriteria(query, brand, pageable);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
-
+    @GetMapping("/latest-products")
+    public ResponseEntity<List<Product>> getLatestProducts() {
+        try {
+            List<Product> latestProducts = productService.getLatestProducts();
+            return new ResponseEntity<>(latestProducts, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occurred while fetching latest products", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

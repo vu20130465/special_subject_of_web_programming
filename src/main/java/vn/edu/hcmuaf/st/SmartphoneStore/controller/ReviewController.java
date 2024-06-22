@@ -25,7 +25,7 @@ public class ReviewController {
     }
 
     // Get reviews for a product by product ID
-    @GetMapping("/product/{productId}")
+        @GetMapping("/product/{productId}")
     public ResponseEntity<List<Review>> getReviewsByProductId(@PathVariable int productId) {
         List<Review> reviews = reviewServiceIml.getReviewsByProductId(productId);
         return ResponseEntity.ok(reviews);

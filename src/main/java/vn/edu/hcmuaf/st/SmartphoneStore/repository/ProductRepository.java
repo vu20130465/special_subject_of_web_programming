@@ -17,8 +17,11 @@ public interface ProductRepository extends JpaRepository<Product, Integer>{
 
 
     Page<Product> findByNameContainingIgnoreCase(String name, Pageable pageable);
+
     @Query("SELECT p FROM Product p WHERE " +
             "(?1 IS NULL OR p.name LIKE %?1% OR p.description LIKE %?1%) AND " +
             "(?2 IS NULL OR p.brand = ?2)")
     Page<Product> findByCriteria(String query, String brand, Pageable pageable);
+
+    Page<Product> findAll(Pageable pageable);
 }

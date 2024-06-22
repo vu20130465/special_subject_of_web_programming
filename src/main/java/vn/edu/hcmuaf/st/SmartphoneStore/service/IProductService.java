@@ -20,4 +20,6 @@ public interface IProductService {
     List<Product> getProductsByCategory(int categoryId);
 
     Page<Product> findByCriteria(String query, String brand, Pageable pageable);
+
+    List<Product> getLatestProducts();
 }
