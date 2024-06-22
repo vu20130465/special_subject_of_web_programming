@@ -15,6 +15,11 @@ public class Review extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int reviewId;
 
+    private int rating;
+
+    @Column(columnDefinition = "TEXT")
+    private String comment;
+
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
@@ -22,11 +27,6 @@ public class Review extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    private int rating;
-
-    @Column(columnDefinition = "TEXT")
-    private String comment;
 
 
     @PrePersist

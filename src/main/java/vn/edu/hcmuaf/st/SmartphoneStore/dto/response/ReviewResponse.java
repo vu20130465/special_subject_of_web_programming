@@ -1,2 +1,15 @@
-package vn.edu.hcmuaf.st.SmartphoneStore.dto.response;public class ReviewResponse {
+package vn.edu.hcmuaf.st.SmartphoneStore.dto.response;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class ReviewResponse {
+    private int status;
+    private String message;
 }
