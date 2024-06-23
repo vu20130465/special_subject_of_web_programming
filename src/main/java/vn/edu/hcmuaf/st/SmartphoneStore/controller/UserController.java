@@ -24,7 +24,7 @@ public class UserController {
     public ResponseEntity<List<User>> getAllUsers() {
         try {
             List<User> result = userService.findAll();
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            return ResponseEntity.ok(result);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
