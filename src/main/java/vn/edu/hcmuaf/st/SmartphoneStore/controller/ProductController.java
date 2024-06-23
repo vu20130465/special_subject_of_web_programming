@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.hcmuaf.st.SmartphoneStore.dto.response.DeleteResponse;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.Product;
 import vn.edu.hcmuaf.st.SmartphoneStore.service.impl.ProductService;
 
@@ -64,10 +65,10 @@ public class ProductController {
 
     // Delete a product
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable int id) {
+    public ResponseEntity<DeleteResponse> deleteProduct(@PathVariable int id) {
         boolean isDeleted = productService.deleteProduct(id);
         if (isDeleted) {
-            return ResponseEntity.noContent().build();
+          return  ResponseEntity.ok(DeleteResponse.builder().message("Deleted").status(HttpStatus.OK.value()).build());
         } else {
             return ResponseEntity.notFound().build();
         }
