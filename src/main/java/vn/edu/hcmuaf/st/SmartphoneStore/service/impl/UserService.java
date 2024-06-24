@@ -2,8 +2,10 @@ package vn.edu.hcmuaf.st.SmartphoneStore.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import vn.edu.hcmuaf.st.SmartphoneStore.dto.UserDTO;
+import vn.edu.hcmuaf.st.SmartphoneStore.dto.request.ChangePasswordRequest;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.User;
 import vn.edu.hcmuaf.st.SmartphoneStore.service.IUserService;
 import vn.edu.hcmuaf.st.SmartphoneStore.repository.UserRepository;
@@ -14,6 +16,7 @@ import java.util.List;
 @Service
 public class UserService implements IUserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
     public UserDTO getInfoUser(User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername(user.getUsername());
@@ -69,5 +72,15 @@ public class UserService implements IUserService {
     @Override
     public boolean existByUsername(String username) {
         return userRepository.existsByUsername(username);
+    }
+    public boolean changePassword(ChangePasswordRequest changePasswordRequest) {
+        User user = userRepository.findByEmail(changePasswordRequest.getEmail()).orElseThrow(() -> new RuntimeException("user not found"));
+        if (user != null && passwordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+            userRepository.save(user);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
