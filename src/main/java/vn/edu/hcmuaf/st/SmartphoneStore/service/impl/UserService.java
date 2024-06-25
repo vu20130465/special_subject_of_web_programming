@@ -47,7 +47,9 @@ public class UserService implements IUserService {
     @Override
     public User updateUser(int id, User user) {
         if (userRepository.existsById(id)) {
+            User old = userRepository.findByUserId(id).orElseThrow(() -> new RuntimeException("user not found"));
             user.setUserId(id);
+            user.setPassword(old.getPassword());
             return userRepository.save(user);
         } else {
             return null;
