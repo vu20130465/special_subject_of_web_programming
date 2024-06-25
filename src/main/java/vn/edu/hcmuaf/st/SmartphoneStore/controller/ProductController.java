@@ -10,9 +10,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.hcmuaf.st.SmartphoneStore.dto.ProductDTO;
 import vn.edu.hcmuaf.st.SmartphoneStore.dto.response.DeleteResponse;
-import vn.edu.hcmuaf.st.SmartphoneStore.model.Product;
-import vn.edu.hcmuaf.st.SmartphoneStore.service.impl.ProductService;
+import vn.edu.hcmuaf.st.SmartphoneStore.service.impl.ProductServiceImpl;
 
 import java.util.List;
 
@@ -21,68 +21,59 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000"})
 public class ProductController {
-    private final ProductService productService;
+    private final ProductServiceImpl productServiceImpl;
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
+
     // Get all products
     @GetMapping("/getAll")
-    public ResponseEntity<List<Product>> getAllProduct() {
-        try {
-            List<Product> result = productService.getAllProducts();
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<List<ProductDTO>> getAllProduct() {
+        List<ProductDTO> products = productServiceImpl.getAllProducts();
+        return ResponseEntity.ok(products);
     }
 
     // Get a single product by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable int id) {
-        Product product = productService.getProductById(id);
-        if (product != null) {
-            return ResponseEntity.ok(product);
-        } else {
+    @GetMapping("/get/{id}")
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable int id) {
+        ProductDTO product = productServiceImpl.getProductById(id);
+        if (product == null) {
             return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.ok(product);
     }
 
     // Create a new product
     @PostMapping("/add")
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-        Product createdProduct = productService.createProduct(product);
-        return ResponseEntity.status(201).body(createdProduct);
+    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO) {
+        ProductDTO createdProduct = productServiceImpl.createProduct(productDTO);
+        return ResponseEntity.ok(createdProduct);
     }
 
     // Update an existing product
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable int id, @RequestBody Product productDetails) {
-        Product updatedProduct = productService.updateProduct(id, productDetails);
-        if (updatedProduct != null) {
-            return ResponseEntity.ok(updatedProduct);
-        } else {
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable int id, @RequestBody ProductDTO productDTO) {
+        ProductDTO updatedProduct = productServiceImpl.updateProduct(id, productDTO);
+        if (updatedProduct == null) {
             return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.ok(updatedProduct);
     }
 
     // Delete a product
     @DeleteMapping("/{id}")
     public ResponseEntity<DeleteResponse> deleteProduct(@PathVariable int id) {
-        boolean isDeleted = productService.deleteProduct(id);
-        if (isDeleted) {
-          return  ResponseEntity.ok(DeleteResponse.builder().message("Deleted").status(HttpStatus.OK.value()).build());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        productServiceImpl.deleteProduct(id);
+        return ResponseEntity.ok().build();
     }
 
     // Get products by category
-    @GetMapping("/category/{categoryId}")
-    public List<Product> getProductsByCategory(@PathVariable int categoryId) {
-        return productService.getProductsByCategory(categoryId);
-    }
+//    @GetMapping("/category/{categoryId}")
+//    public List<ProductDTO> getProductsByCategory(@PathVariable int categoryId) {
+//        return productService.getProductsByCategory(categoryId);
+//    }
 
     // Search for products by name or description
     @GetMapping("/search")
-    public ResponseEntity<Page<Product>> searchProducts(
+    public ResponseEntity<Page<ProductDTO>> searchProducts(
             @RequestParam("query") String query,
             @RequestParam(value = "brand", required = false) String brand,
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -90,13 +81,14 @@ public class ProductController {
             @RequestParam(value = "sort", defaultValue = "price,ASC") String[] sort) {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort[1].equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sort[0]));
-        Page<Product> products = productService.findByCriteria(query, brand, pageable);
+        Page<ProductDTO> products = productServiceImpl.findByCriteria(query, brand, pageable);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
+
     @GetMapping("/latest-products")
-    public ResponseEntity<List<Product>> getLatestProducts() {
+    public ResponseEntity<List<ProductDTO>> getLatestProducts() {
         try {
-            List<Product> latestProducts = productService.getLatestProducts();
+            List<ProductDTO> latestProducts = productServiceImpl.getLatestProducts();
             return new ResponseEntity<>(latestProducts, HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error occurred while fetching latest products", e);
