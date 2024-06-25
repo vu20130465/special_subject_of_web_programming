@@ -1,6 +1,7 @@
 package vn.edu.hcmuaf.st.SmartphoneStore.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vn.edu.hcmuaf.st.SmartphoneStore.dto.ReviewDTO;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.Product;
@@ -73,10 +74,11 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     public Review mapFromReviewDTOToReview(ReviewDTO reviewDTO){
+        User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Review review = new Review();
         Product product = productRepository.findById(reviewDTO.getIdProduct()).orElseThrow(() -> new RuntimeException("Product not found: "));
         review.setProduct(product);
-        review.setUser(userRepository.findByUserId(reviewDTO.getIdUser()).orElseThrow(() -> new RuntimeException("User not found: ")));
+        review.setUser(user);
         review.setRating(reviewDTO.getRating());
         review.setComment(reviewDTO.getComment());
 

@@ -9,6 +9,7 @@ import vn.edu.hcmuaf.st.SmartphoneStore.dto.ReviewDTO;
 import vn.edu.hcmuaf.st.SmartphoneStore.dto.response.ReviewResponse;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.Review;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.User;
+import vn.edu.hcmuaf.st.SmartphoneStore.repository.UserRepository;
 import vn.edu.hcmuaf.st.SmartphoneStore.service.impl.ReviewServiceImpl;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import java.util.List;
 @CrossOrigin(origins = {"http://localhost:3000"})
 public class ReviewController {
     private final ReviewServiceImpl reviewServiceIml;
-
+    private final UserRepository userRepository;
     // Add a review for a product
     @PostMapping("/add")
     public ResponseEntity<ReviewResponse> addReview(@RequestBody ReviewDTO reviewDTO) {
@@ -36,7 +37,7 @@ public class ReviewController {
         List<Review> reivews = reviewServiceIml.getReviewsByProductId(productId);
         List<ReviewDTO> result = new ArrayList<>();
         for(Review review : reivews) {
-            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            User user = userRepository.findByUserId(review.getUser().getUserId()).orElseThrow(() -> new RuntimeException());
             ReviewDTO reviewDTO = new ReviewDTO();
             reviewDTO.setIdUser(user.getUserId());
             reviewDTO.setComment(review.getComment());
