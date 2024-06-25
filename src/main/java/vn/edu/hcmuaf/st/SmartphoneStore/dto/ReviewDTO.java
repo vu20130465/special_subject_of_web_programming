@@ -12,8 +12,6 @@ import vn.edu.hcmuaf.st.SmartphoneStore.model.Product;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReviewDTO extends BaseEntity {
-
-
     private int idProduct;
     private int idUser;
     private String fullName;

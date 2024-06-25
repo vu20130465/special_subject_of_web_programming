@@ -4,7 +4,7 @@ import vn.edu.hcmuaf.st.SmartphoneStore.model.User;
 
 import java.util.List;
 
-public interface IUserService {
+public interface UserService {
     List<User> findAll();
 
     User findById(int id);

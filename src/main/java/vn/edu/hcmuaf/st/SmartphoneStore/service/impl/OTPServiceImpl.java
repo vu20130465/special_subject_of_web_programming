@@ -5,13 +5,13 @@ import org.springframework.stereotype.Service;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.OTP;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.User;
 import vn.edu.hcmuaf.st.SmartphoneStore.repository.OtpRepository;
-import vn.edu.hcmuaf.st.SmartphoneStore.service.IOTPService;
+import vn.edu.hcmuaf.st.SmartphoneStore.service.OTPService;
 
 import java.util.Date;
 import java.util.Random;
 
 @Service
-public class OTPServiceImpl implements IOTPService {
+public class OTPServiceImpl implements OTPService {
     @Autowired
     private OtpRepository otpRepository;
     private static final int LENGTH = 6;
