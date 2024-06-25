@@ -13,11 +13,9 @@ import vn.edu.hcmuaf.st.SmartphoneStore.model.Role;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.User;
 import vn.edu.hcmuaf.st.SmartphoneStore.repository.UserRepository;
 
-import java.util.HashMap;
-
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService {
+public class AuthenticationServiceImpl {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final jwtServiceImpl jwtService;

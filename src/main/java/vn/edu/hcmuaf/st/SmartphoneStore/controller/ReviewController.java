@@ -9,7 +9,6 @@ import vn.edu.hcmuaf.st.SmartphoneStore.dto.ReviewDTO;
 import vn.edu.hcmuaf.st.SmartphoneStore.dto.response.ReviewResponse;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.Review;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.User;
-import vn.edu.hcmuaf.st.SmartphoneStore.service.IReviewService;
 import vn.edu.hcmuaf.st.SmartphoneStore.service.impl.ReviewServiceImpl;
 
 import java.util.ArrayList;

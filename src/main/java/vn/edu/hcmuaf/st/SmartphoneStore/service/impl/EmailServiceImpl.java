@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import vn.edu.hcmuaf.st.SmartphoneStore.service.IEmailService;
+import vn.edu.hcmuaf.st.SmartphoneStore.service.EmailService;
 @Service
-public class EmailServiceImpl implements IEmailService {
+public class EmailServiceImpl implements EmailService {
     @Autowired
     private JavaMailSender mailSender;
     @Override

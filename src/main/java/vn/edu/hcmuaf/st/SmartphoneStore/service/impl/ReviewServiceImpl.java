@@ -9,13 +9,13 @@ import vn.edu.hcmuaf.st.SmartphoneStore.model.User;
 import vn.edu.hcmuaf.st.SmartphoneStore.repository.ProductRepository;
 import vn.edu.hcmuaf.st.SmartphoneStore.repository.ReviewRepository;
 import vn.edu.hcmuaf.st.SmartphoneStore.repository.UserRepository;
-import vn.edu.hcmuaf.st.SmartphoneStore.service.IReviewService;
+import vn.edu.hcmuaf.st.SmartphoneStore.service.ReviewService;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class ReviewServiceImpl implements IReviewService {
+public class ReviewServiceImpl implements ReviewService {
 
     @Autowired
     private  ReviewRepository reviewRepository;

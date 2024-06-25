@@ -1,20 +1,18 @@
 package vn.edu.hcmuaf.st.SmartphoneStore.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import vn.edu.hcmuaf.st.SmartphoneStore.dto.UserDTO;
 import vn.edu.hcmuaf.st.SmartphoneStore.dto.request.ChangePasswordRequest;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.User;
-import vn.edu.hcmuaf.st.SmartphoneStore.service.IUserService;
 import vn.edu.hcmuaf.st.SmartphoneStore.repository.UserRepository;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class UserService implements IUserService {
+public class UserServiceImpl implements vn.edu.hcmuaf.st.SmartphoneStore.service.UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     public UserDTO getInfoUser(User user) {
