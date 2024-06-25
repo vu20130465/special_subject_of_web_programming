@@ -26,6 +26,8 @@ public class SecurityConfiguration {
                 .requestMatchers("/product/getAll").permitAll()
                 .requestMatchers("/product/get/**").permitAll()
                 .requestMatchers("/product/latest-products").permitAll()
+                .requestMatchers("/review/product/{id}").permitAll()
+
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
