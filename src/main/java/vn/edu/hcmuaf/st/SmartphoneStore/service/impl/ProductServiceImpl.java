@@ -67,15 +67,21 @@ public class ProductServiceImpl implements vn.edu.hcmuaf.st.SmartphoneStore.serv
         productRepository.deleteById(id);
     }
 
+    @Override
+    public Page<ProductDTO> findByCriteria(String query, String brand, Pageable pageable) {
+        return null;
+    }
+
+
 //    @Override
 //    public List<ProductDTO> getProductsByCategory(int categoryId) {
 //        return productRepository.findByCategories_CategoryId(categoryId);
 //    }
 
     @Override
-    public Page<ProductDTO> findByCriteria(String query, String brand, Pageable pageable) {
-        Page<Product> productPage = productRepository.findByCriteria(query, brand, pageable);
-        return productPage.map(this::convertToDTO);
+    public Page<ProductDTO> searchProductsByName(String name, Pageable pageable) {
+        return productRepository.findByNameContainingIgnoreCase(name, pageable)
+                .map(this::convertToDTO);
     }
 
 

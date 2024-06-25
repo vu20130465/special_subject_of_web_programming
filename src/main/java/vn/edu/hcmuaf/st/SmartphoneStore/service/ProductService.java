@@ -21,5 +21,7 @@ public interface ProductService {
 
     Page<ProductDTO> findByCriteria(String query, String brand, Pageable pageable);
 
+    Page<ProductDTO> searchProductsByName(String name, Pageable pageable);
+
     List<ProductDTO> getLatestProducts();
 }
