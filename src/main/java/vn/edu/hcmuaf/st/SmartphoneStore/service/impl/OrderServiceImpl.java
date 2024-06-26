@@ -53,12 +53,16 @@ public class OrderServiceImpl implements OrderService {
         // Create Order
         Order order = new Order();
         order.setUser(cart.getUser());
-        order.setOrderDate(LocalDateTime.now());
-        order.setStatus("PENDING");
+        order.setEmail(checkoutRequest.getEmail());
+        order.setFirstName(checkoutRequest.getFirstName());
+        order.setLastName(checkoutRequest.getLastName());
+        order.setPhoneNumber(checkoutRequest.getPhoneNumber());
         order.setShippingAddress(checkoutRequest.getShippingAddress());
-        order.setTotalAmount(totalAmount);
-        order.setCreatedAt(LocalDateTime.now());
-        order.setUpdatedAt(LocalDateTime.now());
+        order.setCountry(checkoutRequest.getCountry());
+        order.setShippingMethod(checkoutRequest.getShippingMethod());
+        order.setPaymentMethod(checkoutRequest.getPaymentMethod());
+        order.setTotalAmount(BigDecimal.valueOf(totalAmount.doubleValue()));
+        order.setStatus("PENDING");
         order = orderRepository.save(order);
 
         // Create Order Details
@@ -70,8 +74,6 @@ public class OrderServiceImpl implements OrderService {
             orderDetail.setProduct(cartItem.getProduct());
             orderDetail.setQuantity(cartItem.getQuantity());
             orderDetail.setPrice(cartItem.getProduct().getPrice());
-            orderDetail.setCreatedAt(LocalDateTime.now());
-            orderDetail.setUpdatedAt(LocalDateTime.now());
             return orderDetail;
         }).collect(Collectors.toList());
         orderDetailRepository.saveAll(orderDetails);
@@ -89,7 +91,14 @@ public class OrderServiceImpl implements OrderService {
         OrderDTO orderDTO = new OrderDTO();
         orderDTO.setOrderId(order.getOrderId());
         orderDTO.setUserId(order.getUser().getUserId());
+        orderDTO.setEmail(order.getEmail());
+        orderDTO.setFirstName(order.getFirstName());
+        orderDTO.setLastName(order.getLastName());
+        orderDTO.setPhoneNumber(order.getPhoneNumber());
+        orderDTO.setCountry(order.getCountry());
         orderDTO.setShippingAddress(order.getShippingAddress());
+        orderDTO.setShippingMethod(order.getShippingMethod());
+        orderDTO.setPaymentMethod(order.getPaymentMethod());
         orderDTO.setTotalAmount(order.getTotalAmount());
 
         List<OrderDetailDTO> orderDetailDTOs = orderDetails.stream().map(orderDetail -> {
@@ -123,26 +132,34 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private OrderDTO convertToDTO(Order order) {
-        List<OrderDetailDTO> orderDetailDTOs = order.getOrderDetails().stream()
-                .map(this::convertToOrderDetailDTO)
+        List<OrderDetail> orderDetails = orderDetailRepository.findByOrder_OrderId(order.getOrderId());
+        List<OrderDetailDTO> orderDetailDTOs = orderDetails.stream()
+                .map(detail -> new OrderDetailDTO(detail.getProduct().getProductId(), detail.getProduct().getName(), detail.getQuantity(), detail.getPrice()))
                 .collect(Collectors.toList());
 
         return new OrderDTO(
                 order.getOrderId(),
                 order.getUser().getUserId(),
+                order.getEmail(),
+                order.getFirstName(),
+                order.getLastName(),
+                order.getPhoneNumber(),
                 order.getShippingAddress(),
+                order.getCountry(),
+                order.getShippingMethod(),
+                order.getPaymentMethod(),
                 order.getTotalAmount(),
                 orderDetailDTOs
         );
     }
 
-    private OrderDetailDTO convertToOrderDetailDTO(OrderDetail orderDetail) {
-        return new OrderDetailDTO(
-                orderDetail.getProduct().getProductId(),
-                orderDetail.getProduct().getName(),
-                orderDetail.getQuantity(),
-                orderDetail.getPrice()
-        );
-    }
+//    private OrderDetailDTO convertToOrderDetailDTO(OrderDetail orderDetail) {
+//        return new OrderDetailDTO(
+//                orderDetail.getProduct().getProductId(),
+//                orderDetail.getProduct().getName(),
+//                orderDetail.getQuantity(),
+//                orderDetail.getPrice()
+//        );
+//    }
 }
 

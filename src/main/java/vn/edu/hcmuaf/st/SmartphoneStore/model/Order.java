@@ -20,14 +20,16 @@ public class Order extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    private LocalDateTime orderDate;
-
     private String status;
-
     private BigDecimal totalAmount;
-
+    private String email;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
+    private String country;
     private String shippingAddress;
+    private String shippingMethod;
+    private String paymentMethod;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails;

@@ -16,8 +16,6 @@ public class CheckoutRequestDTO {
     private String phoneNumber;
     private String shippingAddress;
     private String country;
-    private String city;
-    private String district;
     private String shippingMethod;
     private String paymentMethod;
 }

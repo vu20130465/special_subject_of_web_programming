@@ -15,7 +15,14 @@ import java.util.List;
 public class OrderDTO {
     private int orderId;
     private int userId;
+    private String email;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
     private String shippingAddress;
+    private String country;
+    private String shippingMethod;
+    private String paymentMethod;
     private BigDecimal totalAmount;
     private List<OrderDetailDTO> orderDetails;
 }
