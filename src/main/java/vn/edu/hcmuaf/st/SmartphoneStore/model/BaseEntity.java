@@ -1,9 +1,6 @@
 package vn.edu.hcmuaf.st.SmartphoneStore.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Setter
 @Getter
@@ -24,4 +22,5 @@ public abstract class  BaseEntity {
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     LocalDateTime updatedAt;
+
 }
