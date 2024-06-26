@@ -71,17 +71,15 @@ public class ProductController {
 //        return productService.getProductsByCategory(categoryId);
 //    }
 
-    // Search for products by name or description
     @GetMapping("/search")
     public ResponseEntity<Page<ProductDTO>> searchProducts(
             @RequestParam("query") String query,
-            @RequestParam(value = "brand", required = false) String brand,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
-            @RequestParam(value = "sort", defaultValue = "price,ASC") String[] sort) {
+            @RequestParam(value = "sort", defaultValue = "price,asc") String[] sort) {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(sort[1].equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, sort[0]));
-        Page<ProductDTO> products = productServiceImpl.findByCriteria(query, brand, pageable);
+        Page<ProductDTO> products = productServiceImpl.searchProductsByName(query, pageable);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
