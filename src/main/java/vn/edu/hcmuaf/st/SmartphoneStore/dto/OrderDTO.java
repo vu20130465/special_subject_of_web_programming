@@ -18,7 +18,5 @@ public class OrderDTO {
     private String shippingAddress;
     private BigDecimal totalAmount;
     private List<OrderDetailDTO> orderDetails;
-
-    // Getters and Setters
 }
 
