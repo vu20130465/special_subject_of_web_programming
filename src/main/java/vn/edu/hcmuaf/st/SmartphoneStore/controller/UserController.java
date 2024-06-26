@@ -10,6 +10,7 @@ import vn.edu.hcmuaf.st.SmartphoneStore.model.User;
 import vn.edu.hcmuaf.st.SmartphoneStore.service.impl.UserServiceImpl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequestMapping("/user")
@@ -21,10 +22,23 @@ public class UserController {
 
     // Get all users
     @GetMapping("/getAll")
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
         try {
-            List<User> result = userServiceImpl.findAll();
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            List<User> userList = userServiceImpl.findAll();
+            List<UserDTO> result = new ArrayList<>();
+            for(User user : userList){
+                UserDTO userDTO = new UserDTO();
+                userDTO.setId(user.getUserId());
+                userDTO.setRole(user.getRole());
+                userDTO.setPhoneNumber(user.getPhoneNumber());
+                userDTO.setPassword(user.getPassword());
+                userDTO.setEmail(user.getEmail());
+                userDTO.setAddress(user.getAddress());
+                userDTO.setUsername(user.getUsername());
+                userDTO.setFullName(user.getFullName());
+                result.add(userDTO);
+            }
+            return ResponseEntity.ok(result);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -37,10 +51,19 @@ public class UserController {
     }
     // Get a single user by ID
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable int id) {
+    public ResponseEntity<UserDTO> getUserById(@PathVariable int id) {
         User user = userServiceImpl.findById(id);
-        if (user != null) {
-            return ResponseEntity.ok(user);
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getUserId());
+        userDTO.setRole(user.getRole());
+        userDTO.setPhoneNumber(user.getPhoneNumber());
+        userDTO.setPassword(user.getPassword());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setAddress(user.getAddress());
+        userDTO.setFullName(user.getFullName());
+        userDTO.setUsername(user.getUsername());
+        if (userDTO != null) {
+            return ResponseEntity.ok(userDTO);
         } else {
             return ResponseEntity.notFound().build();
         }
