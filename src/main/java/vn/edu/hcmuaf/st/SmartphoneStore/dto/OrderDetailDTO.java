@@ -16,7 +16,5 @@ public class OrderDetailDTO {
     private String productName;
     private int quantity;
     private BigDecimal price;
-
-    // Getters and Setters
 }
 

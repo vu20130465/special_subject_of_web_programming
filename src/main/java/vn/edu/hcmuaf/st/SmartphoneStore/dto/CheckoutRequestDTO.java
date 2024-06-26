@@ -10,6 +10,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CheckoutRequestDTO {
-    private int userId;
+    private String email;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
     private String shippingAddress;
+    private String country;
+    private String city;
+    private String district;
+    private String shippingMethod;
+    private String paymentMethod;
 }

@@ -1,6 +1,7 @@
 package vn.edu.hcmuaf.st.SmartphoneStore.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.edu.hcmuaf.st.SmartphoneStore.dto.CheckoutRequestDTO;
@@ -9,6 +10,7 @@ import vn.edu.hcmuaf.st.SmartphoneStore.dto.OrderDetailDTO;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.Cart;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.Order;
 import vn.edu.hcmuaf.st.SmartphoneStore.model.OrderDetail;
+import vn.edu.hcmuaf.st.SmartphoneStore.model.User;
 import vn.edu.hcmuaf.st.SmartphoneStore.repository.CartItemRepository;
 import vn.edu.hcmuaf.st.SmartphoneStore.repository.CartRepository;
 import vn.edu.hcmuaf.st.SmartphoneStore.repository.OrderDetailRepository;
@@ -38,7 +40,8 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public OrderDTO checkout(CheckoutRequestDTO checkoutRequest) {
-        Cart cart = cartRepository.findByUser_UserId(checkoutRequest.getUserId());
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Cart cart = cartRepository.findByUser_UserId(user.getUserId());
         if (cart == null || cart.getCartItems().isEmpty()) {
             throw new RuntimeException("Cart is empty");
         }
@@ -100,6 +103,46 @@ public class OrderServiceImpl implements OrderService {
 
         orderDTO.setOrderDetails(orderDetailDTOs);
         return orderDTO;
+    }
+
+
+    @Override
+    public List<OrderDTO> getAllOrders() {
+        return orderRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderDTO> getOrdersOfUser() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        int userId = user.getUserId();
+        return orderRepository.findByUser_UserId(userId).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    private OrderDTO convertToDTO(Order order) {
+        List<OrderDetailDTO> orderDetailDTOs = order.getOrderDetails().stream()
+                .map(this::convertToOrderDetailDTO)
+                .collect(Collectors.toList());
+
+        return new OrderDTO(
+                order.getOrderId(),
+                order.getUser().getUserId(),
+                order.getShippingAddress(),
+                order.getTotalAmount(),
+                orderDetailDTOs
+        );
+    }
+
+    private OrderDetailDTO convertToOrderDetailDTO(OrderDetail orderDetail) {
+        return new OrderDetailDTO(
+                orderDetail.getProduct().getProductId(),
+                orderDetail.getProduct().getName(),
+                orderDetail.getQuantity(),
+                orderDetail.getPrice()
+        );
     }
 }
 
